@@ -1,3 +1,4 @@
+import { GroupsCoordinator } from "./group.ts";
 import { Item } from "./item.ts";
 import { Rucksack } from "./rucksack.ts";
 import { readLines } from "https://deno.land/std@0.163.0/io/buffer.ts";
@@ -7,14 +8,15 @@ const file = await Deno.open(
   { read: true, write: false },
 );
 
-let rucksacks: Rucksack[] = [];
+const rucksacks: Rucksack[] = [];
+const groupCoordinator = new GroupsCoordinator();
 
 for await (const line of readLines(file)) {
-  rucksacks.push(
-    new Rucksack(
-      line.split("").map((char) => Item.fromString(char)),
-    ),
+  const rucksack = new Rucksack(
+    line.split("").map((char) => Item.fromString(char)),
   );
+  rucksacks.push(rucksack);
+  groupCoordinator.addRucksack(rucksack);
 }
 
 console.log(
@@ -22,4 +24,8 @@ console.log(
     (sum, item) => sum + item.priority,
     0,
   ),
+);
+
+console.log(
+  groupCoordinator.groups.reduce((score, group) => score + group.score, 0),
 );

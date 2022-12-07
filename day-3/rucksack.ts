@@ -1,8 +1,9 @@
 import { Item } from "./item.ts";
 
 export class Rucksack {
-  public readonly part1: ReadonlyArray<Item>;
-  public readonly part2: ReadonlyArray<Item>;
+  private readonly part1: ReadonlyArray<Item>;
+  private readonly part2: ReadonlyArray<Item>;
+  private itemsLookupIndex: Map<Item, boolean>;
 
   public get duplicates(): ReadonlyArray<Item> {
     const duplicates = new Set<Item>();
@@ -17,6 +18,10 @@ export class Rucksack {
     return Array.from(duplicates);
   }
 
+  public get uniqItems(): ReadonlyArray<Item> {
+    return Array.from(this.itemsLookupIndex.keys());
+  }
+
   constructor(items: Item[]) {
     if (items.length % 2 !== 0) {
       throw new Error("Invalid items number");
@@ -24,5 +29,11 @@ export class Rucksack {
 
     this.part1 = items.slice(0, items.length / 2);
     this.part2 = items.slice(items.length / 2);
+
+    this.itemsLookupIndex = new Map(items.map((item) => [item, true]));
+  }
+
+  public hasItem(item: Item): boolean {
+    return this.itemsLookupIndex.has(item);
   }
 }

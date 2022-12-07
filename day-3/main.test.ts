@@ -1,3 +1,4 @@
+import { Group } from "./group.ts";
 import { Rucksack } from "./rucksack.ts";
 import { Item } from "./item.ts";
 import {
@@ -38,4 +39,26 @@ Deno.test("Rucksack can show duplicates", () => {
   ]);
 
   assertEquals([Item.fromString("a")], rucksack.duplicates);
+});
+
+Deno.test("Get group badges and score", () => {
+  const group = new Group([
+    new Rucksack([
+      Item.fromString("a"),
+      Item.fromString("b"),
+    ]),
+    new Rucksack([
+      Item.fromString("c"),
+      Item.fromString("b"),
+    ]),
+    new Rucksack([
+      Item.fromString("a"),
+      Item.fromString("b"),
+      Item.fromString("c"),
+      Item.fromString("d"),
+    ]),
+  ]);
+
+  assertEquals(group.badges, [Item.fromString("b")]);
+  assertEquals(group.score, Item.fromString("b").priority);
 });

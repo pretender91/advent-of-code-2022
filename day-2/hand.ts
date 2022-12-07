@@ -38,29 +38,58 @@ export class Hand {
     return HandCompareResult.Win;
   }
 
-  static player1(shape: string) {
+  static fromString(shape: string) {
     switch (shape) {
       case "A":
+      case "X":
         return new Hand(HandShape.Rock);
       case "B":
+      case "Y":
         return new Hand(HandShape.Paper);
       case "C":
+      case "Z":
         return new Hand(HandShape.Scissors);
       default:
         throw new Error("Invalid shape of hande.");
     }
   }
 
-  static player2(shape: string) {
-    switch (shape) {
-      case "X":
-        return new Hand(HandShape.Rock);
-      case "Y":
+  static winHandFor(hand: Hand): Hand {
+    switch (hand.shape) {
+      case HandShape.Rock:
         return new Hand(HandShape.Paper);
-      case "Z":
+      case HandShape.Paper:
         return new Hand(HandShape.Scissors);
+      case HandShape.Scissors:
+        return new Hand(HandShape.Rock);
+    }
+  }
+
+  static loseHandFor(hand: Hand): Hand {
+    switch (hand.shape) {
+      case HandShape.Rock:
+        return new Hand(HandShape.Scissors);
+      case HandShape.Paper:
+        return new Hand(HandShape.Rock);
+      case HandShape.Scissors:
+        return new Hand(HandShape.Paper);
+    }
+  }
+
+  static drawHandFor(hand: Hand): Hand {
+    return new Hand(hand.shape);
+  }
+
+  static fromStrategy(strategy: string, oppositeHand: Hand) {
+    switch (strategy) {
+      case "X":
+        return Hand.loseHandFor(oppositeHand);
+      case "Y":
+        return Hand.drawHandFor(oppositeHand);
+      case "Z":
+        return Hand.winHandFor(oppositeHand);
       default:
-        throw new Error("Invalid shape of hande.");
+        throw new Error("Unknown strategy");
     }
   }
 }

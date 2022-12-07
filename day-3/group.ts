@@ -14,9 +14,7 @@ export class Group {
     const commonItems12 = new Set<Item>(
       rucksack2.uniqItems.filter((item) => rucksack1.hasItem(item)),
     );
-    return rucksack3.uniqItems.filter((item) =>
-      commonItems12.has(item)
-    );
+    return rucksack3.uniqItems.filter((item) => commonItems12.has(item));
   }
 
   public get score(): number {
